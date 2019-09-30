@@ -1,0 +1,170 @@
+# Arguments that get passed to the constructor of your class instance
+# as config={} keyword
+environment:
+    grid_size: 10         # Size of the grid to use NxN
+    step_limit: 200       # Max number of steps to reach the goal
+    image_as_state: false # Use image as the state input? In that case change the policy to CustomCnnPolicy
+    reward_shaping: true  # Use euclidean distance from goal to the target for the extra reward
+    show_training: True   # Render the agent while training
+
+    # MODELS:
+    # -----
+    # For discrete action space environments:
+    #     PPO2, DQN, ACER, A2C, ACKTR
+    # For continuous action space environments:
+    #     PPO2, A2C
+
+    # POLICIES:
+    # ---------
+    #     Configurable:
+    #         CustomCnnPolicy - CNN feature extraction
+    #         CustomLSTMPolicy - LSTM cells followed by a multilayer perceptron
+    #         CustomMlpPolicy - Multilayer perceptron
+    #         CustomDQNPolicy - Multilayer perceptron specifically for DQN
+    #     Defaults:
+    #         CnnPolicy - CNN as described in 2014 Atari paper
+    #         MlpPolicy - simple MLP with two hidden layers of size 64
+main:    
+    model: PPO2
+    policy: CustomMlpPolicy
+    normalize: false
+    n_workers: 4       # Parallel environments
+    n_steps: 50000    # Steps to train
+    save_every: 50000  # Save a checkpoint of the model every n steps
+
+    # Tensorboard logs for environment attributes e.g. self.steps
+    logs:
+        - steps
+models:
+    PPO2:
+        gamma: 0.99          # Discount factor for future rewards
+        n_steps: 128         # Batch size (n_steps * n_workers)
+        ent_coef: 0.01       # Entropy loss coefficient (higher values encourage more exploration)
+        learning_rate: 0.001 # LR
+        vf_coef: 0.5         # The contribution of value function loss to the total loss of the network
+        max_grad_norm: 0.5   # Max range of the gradient clipping 
+        lam: 0.95            # Generalized advantage estimation, for controlling variance/bias tradeoff
+        nminibatches: 4      # Number of minibatches for SGD/Adam updates
+        noptepochs: 4        # Number of iterations for SGD/Adam
+        cliprange: 0.2       # Clip factor for PPO (the action probability distribution of the updated policy cannot differ from the old one by this fraction [measured by KL divergence])
+        full_tensorboard_log: false
+        verbose: 2  
+    DQN:
+        gamma: 0.99 
+        learning_rate: 0.001
+        buffer_size: 20000
+        exploration_fraction: 0.1 
+        exploration_final_eps: 0.01
+        train_freq: 1
+        batch_size: 32
+        learning_starts: 1000
+        target_network_update_freq: 500
+        prioritized_replay: false
+        prioritized_replay_alpha: 0.2
+        prioritized_replay_beta0: 0.4
+        prioritized_replay_beta_iters: None
+        prioritized_replay_eps: 0.000001
+        param_noise: False
+        verbose: 1
+        full_tensorboard_log: False
+        _init_setup_model: True
+    A2C: 
+        gamma: 0.99
+        learning_rate: 0.0007
+        n_steps: 5
+        vf_coef: 0.25 
+        ent_coef: 0.01 
+        max_grad_norm: 0.5
+        alpha: 0.99
+        epsilon: 0.0001
+        lr_schedule: constant
+        verbose: 0
+        full_tensorboard_log: False
+    ACER: 
+        gamma: 0.99
+        n_steps: 20
+        num_procs: 1
+        q_coef: 0.5
+        ent_coef: 0.01
+        max_grad_norm: 10
+        learning_rate: 0.0007
+        lr_schedule: linear
+        rprop_alpha: 0.99
+        rprop_epsilon: 0.0001
+        buffer_size: 5000
+        replay_ratio: 4
+        replay_start: 1000
+        correction_term: 10.0
+        trust_region: true
+        alpha: 0.99
+        delta: 1
+        verbose: 0
+    ACKTR:
+        gamma: 0.99 
+        nprocs: 1 
+        n_steps: 20
+        ent_coef: 0.01
+        vf_coef: 0.25
+        vf_fisher_coef: 1.0
+        learning_rate: 0.25
+        max_grad_norm: 0.5
+        kfac_clip: 0.001
+        lr_schedule: linear 
+        verbose: 0
+        async_eigen_decomp: False
+        full_tensorboard_log: False
+policies:
+    CustomMlpPolicy: 
+        shared:
+            - 32
+            - 32
+        h_actor:  [] # Policy head
+            # - 8
+        h_critic: [] # Value head
+            # - 4
+
+    CustomDQNPolicy:
+        layers:
+            - 64
+            - 64
+
+    CustomLSTMPolicy:
+        n_lstm: 64
+        shared:
+            - 64
+            - 64
+            - lstm
+        h_actor: []
+            # - 16
+        h_critic: []
+            # - 16
+
+    CustomCnnPolicy:
+        filters:
+        - 1
+        - 4
+        - 4
+        kernel_size:
+        - 3
+        # - 3
+        # - 3
+        stride:
+        - 1
+        # - 1
+        # - 1
+        shared: # Number of nodes in the layers of the shared part of the fully connected network
+        - 128
+        - 128
+        h_actor: # Number of nodes per layer in the actor part of the network
+        - 64
+        - 16
+        h_critic:  # Number of nodes per layer in the critic part of the network
+        - 32
+        - 8
+        activ: relu
+        pd_init_scale: 0.05
+        conv_init_scale: 1.4
+        kernel_initializer: glorot_normal_initializer
+        init_bias: .5
+
+    
