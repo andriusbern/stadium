@@ -9,6 +9,9 @@ import copy
 def custom_cnn(scaled_images, params, **kwargs):
     """
     Custom CNN Architecture builder for this project
+
+    Arguments to this function are passed from 
+    rl/config/env_name.yml  -> policies: CustomCnnPolicy
     """
     try:
         activ = getattr(tf.nn, params['activ'])
@@ -16,6 +19,7 @@ def custom_cnn(scaled_images, params, **kwargs):
         print(e, 'Invalid activation function.')
 
     init_scale = params['conv_init_scale']
+    
     # First layer
     out = activ(conv(
         input_tensor=scaled_images, 
@@ -41,9 +45,10 @@ def custom_cnn(scaled_images, params, **kwargs):
 
     return out
 
+
 class CustomCnnPolicy(ActorCriticPolicy):
     """
-    Custom CNN policy, requires a params dictionary (ParameterContainer) as an argument
+    Custom CNN policy
     """
     def __init__(self, sess, ob_space, ac_space, n_env, n_steps, n_batch, reuse=False,
                  params=None, **kwargs):
@@ -75,6 +80,8 @@ class CustomCnnPolicy(ActorCriticPolicy):
             value_fn = tf.layers.dense(vf_h, 1, name='vf')
             vf_latent = vf_h
 
+            # Initialize appropriate probability distribution as the NN output based on
+            # the type of action space
             self._proba_distribution, self._policy, self.q_value = \
                 self.pdtype.proba_distribution_from_latent(pi_latent, vf_latent, init_scale=init_scale, init_bias=params['init_bias'])
 
@@ -100,6 +107,9 @@ class CustomCnnPolicy(ActorCriticPolicy):
 class CustomMlpPolicy(FeedForwardPolicy):
     """
     A custom MLP policy architecture initializer
+
+    Arguments to the constructor are passed from 
+    rl/config/env_name.yml  -> policies: CustomMlpPolicy
     """
     
     def __init__(self, sess, ob_space, ac_space, n_env, n_steps, n_batch, reuse=False, params=None, **kwargs):
@@ -113,6 +123,12 @@ class CustomMlpPolicy(FeedForwardPolicy):
                                               feature_extraction="mlp")
 
 class CustomLSTMPolicy(LstmPolicy):
+    """
+    A custom LSTM policy architecture initializer
+
+    Arguments to the constructor are passed from 
+    rl/config/env_name.yml  -> policies: CustomLSTMPolicy
+    """
     def __init__(self, sess, ob_space, ac_space, n_env, n_steps, n_batch, n_lstm=64, reuse=False, params=None, **_kwargs):
         config = copy.deepcopy(params)
         net_architecture = config['shared']
@@ -124,8 +140,13 @@ class CustomLSTMPolicy(LstmPolicy):
                          net_arch=net_architecture, layer_norm=True, feature_extraction="mlp", **_kwargs)
 
 
-# Custom MLP policy of two layers of size 32 each
 class CustomDQNPolicy(DQNffwd):
+    """
+    A custom LSTM policy architecture initializer
+
+    Arguments to the constructor are passed from 
+    rl/config/env_name.yml  -> policies: CustomDQNolicy
+    """
     def __init__(self, *args, **kwargs):
         super(CustomDQNPolicy, self).__init__(*args, **kwargs,
                                            layer_norm=False,

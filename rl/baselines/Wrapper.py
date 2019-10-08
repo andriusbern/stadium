@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import stable_baselines, gym, rl
 import rl.settings as settings
 import tensorflow as tf
+import glob
 
 # Error suppression (numpy 1.16.2, tensorflow 1.13.1)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
@@ -17,16 +18,15 @@ tf.logging.info('TensorFlow')
 tf.logging.set_verbosity(tf.logging.ERROR)
 tf.logging.info('TensorFlow')
 
+
 def get_env_type(env_name):
     """
     Get the type of environment from the env_name string
     """
-
     try:
         env = gym.make(env_name)
         del env
         return 'gym'
-        print('{} is not a viable environment.'.format(env_name))
     except:
         return 'rl'
 
@@ -38,7 +38,7 @@ def create_env(env_name, config=None, n_workers=1, image_based=True, **kwargs):
 
     def make_rl(**kwargs):
         """
-        Decorator for generic envs
+        Decorator for custom RL environments
         """
         def _init():
             env_obj = getattr(rl.environments, env_name)
@@ -61,20 +61,21 @@ def create_env(env_name, config=None, n_workers=1, image_based=True, **kwargs):
     mapping = {'gym': make_gym, 'rl': make_rl}
     env_type = get_env_type(env_name)
     env_decorator = mapping[env_type]
-    envs = [env_decorator(rank=x) for x in range(n_workers)]
+    vectorized_decorator = [env_decorator(rank=x) for x in range(n_workers)]
 
     # Parallelize
     if n_workers > 1:
-        vectorized = SubprocVecEnv(envs, start_method='spawn')
-        if 'normalize' in config['main'].keys():
-            vectorized = VecNormalize(vectorized, clip_obs=1, clip_reward=1)
-    else:
-        # Non multi-processing env
-        vectorized = DummyVecEnv(envs)
+        method = 'spawn' if sys.platform == 'win32' else 'forkserver'
+        vectorized = SubprocVecEnv(vectorized_decorator, start_method=method)
+    else: # Non multi-processing env
+        vectorized = DummyVecEnv(vectorized_decorator)
+
     # Frame-stacking for CNN based environments
     if 'frame_stack' in config['main'].keys():
         if config['main']['frame_stack'] != 0:
             vectorized = VecFrameStack(vectorized, n_stack=config['main']['frame_stack'])
+    if 'normalize' in config['main'].keys():
+            vectorized = VecNormalize(vectorized, clip_obs=1, clip_reward=1)
 
     return vectorized
 
@@ -123,19 +124,17 @@ class Trainer(object):
         self.env_name = env
         self._env_type = get_env_type(self.env_name)
         self.date = datetime.datetime.now().strftime("%m-%d_%H-%M")
-        # , self._env_type,
         self._env_path = os.path.join(settings.TRAINED_MODELS, env, subdir)
         self._model_path = None
         self.reloaded = False
         self.done = True
         self.test_state = None
-        print('Loading path {}'.format(self._env_path))
          
     def load_model(self, num=None, config_file=None, latest=False, path=None):
         """
         Load a saved model either from the 
         """
-        import glob
+        print('Loading path {}'.format(self._env_path))
         assert os.path.isdir(self._env_path), 'Path {} does not exist.'.format(self._env_path)
 
         folder_list = glob.glob(self._env_path + '/*') 
@@ -171,6 +170,7 @@ class Trainer(object):
         Creates a new RL Model
         """
         
+        self.name = name
         if config_file is None:
             args = dict(env_name=self.env_name)
             args['config_location'] = config_location
@@ -181,23 +181,22 @@ class Trainer(object):
         self.n_steps = self.config['main']['n_steps']
         self.create_env()
 
-        policy_name   = c['main']['policy']
         model_name    = c['main']['model']
-        policy_params = c['policies'][policy_name]
         model_params  = c['models'][model_name]
+        policy_name   = c['main']['policy']
+        policy_params = c['policies'][policy_name]
         print('\nCreating {} model...'.format(model_name))
 
         self.policy = self._get_policy(policy_name)
         model_object = getattr(stable_baselines, model_name)
-
-        self.name = name
 
         model_args = dict(
             policy=self.policy, 
             env=self.env,
             tensorboard_log=self._env_path,
             **model_params)
-
+        
+        # DDPG Model creation
         if 'DDPG' in model_name:
             from stable_baselines.ddpg.noise import OrnsteinUhlenbeckActionNoise, AdaptiveParamNoiseSpec, NormalActionNoise
             n_actions = self.env.action_space.shape[0]
@@ -237,7 +236,6 @@ class Trainer(object):
         """
         Creates a unique subfolder in the environment directory for the current trained model
         """
-
         # Create the environment specific directory if it does not exist
         if not os.path.isdir(self._env_path):
             os.makedirs(self._env_path)
@@ -257,7 +255,7 @@ class Trainer(object):
 
         self._unique_model_identifier = str(num) + '_' + dir_name #+ '_1' # Unique identifier of this model
         self._model_path = os.path.join(self._env_path, self._unique_model_identifier) # trained_models/env_type/env/trainID_uniquestamp
-        # os.makedirs(self._model_path, exist_ok=True)
+        os.makedirs(self._model_path, exist_ok=True)
 
     def _delete_incomplete_models(self):
         """
@@ -292,8 +290,16 @@ class Trainer(object):
         webbrowser.open_new_tab(url='http://localhost:6006/#scalars&_smoothingWeight=0.995')
     
     def _tensorboard_kill(self):
+        """
+        Destroy all running instances of tensorboard
+        """
         print('Closing current session of tensorboard.')
-        os.system("taskkill /f /im  tensorboard.exe")
+        if sys.platform == 'win32':
+            os.system("taskkill /f /im  tensorboard.exe")
+        elif sys.platform == 'linux':
+            os.system('pkill tensorboard')
+        else:
+            print('No running instances of tensorboard.')
 
     def _check_env_status(self):
         """
@@ -312,7 +318,12 @@ class Trainer(object):
 
     def callback(self, locals_, globals_):
         """
-        A method for logging environment attributes in tensorboard
+        A callback method for logging environment attributes in tensorboard
+
+        Define them in rl/config/env_name.yml --> main: logs:
+        
+        Example for logging the number of steps per episode can be found in
+        rl/config/TestEnv.yml
         """
         self_ = locals_['self']
         # Log additional tensor
@@ -400,42 +411,3 @@ if __name__ == "__main__":
     b = Trainer(env)
     b.create_model()
     b.run()
-
-
-
-# def sample_best(self, metric, threshold, episodes=100, delay=0.001, deterministic=False):
-#     """
-#     Sample the best performing trajectories based on a metric measure at the end of the episode
-#     E.G. if fill rate of the stack is above a certain threshold
-
-#     """
-#     self.test_env.reset()
-#     self._check_env_status()
-
-#     image_buffer, trajectories = [], 0
-#     for _ in range(episodes):
-#         self.test_state = self.model.env.reset()
-#         self.done = [False]
-#         episode_buffer = []
-#         while not self.done[0]:
-#             current_attribute_value = self.model.env.get_attr(metric)[0]    
-#             action, _ = self.model.predict(self.test_state, deterministic=deterministic)
-#             self.test_state, _, self.done, _ = self.model.env.step(action)
-#             im = np.squeeze(self.test_state)
-#             im = np.asarray(im, dtype=np.uint8)
-#             im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-#             episode_buffer.append(im)
-#         if current_attribute_value > threshold:
-#             image_buffer += episode_buffer
-#             trajectories += 1
-    
-#     name = 'Testing model'
-#     cv2.namedWindow(name, cv2.WINDOW_NORMAL)
-#     cv2.resizeWindow(name, 600, 600)
-#     for img in image_buffer[:-1]:
-#         cv2.imshow(name, img)
-#         cv2.waitKey(20)
-#     cv2.destroyWindow(name)
-#     self.model.set_env(self.env)
-
-#     return image_buffer[:-1]

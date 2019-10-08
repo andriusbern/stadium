@@ -2,15 +2,13 @@ from setuptools import setup
 import time, os
 
 packages = ['numpy==1.16.2',        
-            # 'tensorflow',   # ML
             'tensorflow==1.13.1',
             'gym',
             'opencv-python',# Image processing
             'matplotlib',   # Visualization        
             'stable_baselines',
-            'ipython',
-            'pyyaml'
-            ]
+            'pyyaml']
+            
 setup(
     name='rl',
     description='RL training library.',

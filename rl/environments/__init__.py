@@ -1,2 +1,1 @@
-from .testEnv import TestEnv
-from .SMARTPICK import SMARTPICK
+from .TestEnv import TestEnv
