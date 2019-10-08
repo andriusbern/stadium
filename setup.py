@@ -7,12 +7,14 @@ packages = ['numpy==1.16.2',
             'opencv-python',# Image processing
             'matplotlib',   # Visualization        
             'stable_baselines',
-            'pyyaml']
-            
+            'pyyaml',
+            'PyQt5',
+            'pyqtgraph']
+
 setup(
     name='rl',
     description='RL training library.',
-    long_description='',
+    long_description='GUI for OpenAI Gym, scripts, configurations',
     version='0.2',
     packages=['rl'],
     scripts=[],

@@ -6,7 +6,6 @@ from collections import deque
 import numpy as np
 import os, yaml, sys, subprocess, webbrowser, time, datetime, random, copy
 import cv2
-import matplotlib.pyplot as plt
 import stable_baselines, gym, rl
 import rl.settings as settings
 import tensorflow as tf
@@ -215,8 +214,7 @@ class Trainer(object):
 
     def _get_policy(self, policy_name):
         """
-        Returns a corresponding policy object either from stable_baselines or the
-        custom ones defined in 'rusher/baselines/CustomPolicies.py'
+        Returns a corresponding policy object either from stable_baselines
         """
         if hasattr(stable_baselines.common.policies, policy_name):
             return getattr(stable_baselines.common.policies, policy_name)

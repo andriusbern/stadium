@@ -1,11 +1,26 @@
 # *RL* Package
 
+<img src="assets/gui.gif" width="500"> 
+
 This package contains:  
 
-- Contains a wrapper class for [stable-baselines](https://github.com/hill-a/stable-baselines) Reinforcement Learning library that adds functionality for logging, loading and configuring RL models and environments in a simple way.
-- Detailed instructions on how to create your own custom reinforcement learning environments.
-- A simple custom RL test environment.
+- A GUI for *OpenAI gym* environments where agents can be configured, trained and tested using the same simple interface with a basic implementation of [PPO](https://openai.com/blog/openai-baselines-ppo/).
+- Contains a wrapper class for [stable-baselines](https://github.com/hill-a/stable-baselines) Reinforcement Learning library that adds functionality for logging, loading and configuring RL models, network architectures and environments in a simple way.
+- Detailed instructions and examples on how to create your own custom reinforcement learning environments.
 - Scripts for training, testing, retraining models and scheduling experiments.
+
+## Dependencies:
+
+- numpy==1.16.2
+- tensorflow==1.13.1
+- gym[all]
+- opencv-python
+- stable_baselines  (follow the installation instructions [here](https://stable-baselines.readthedocs.io/en/master/guide/install.html))
+- pyyaml
+  
+**GUI**
+- PyQt5
+- pyqtgraph
 
 ## Installation
 
@@ -18,11 +33,14 @@ pip install -e .
 
 ## Usage:
 
-The instructions on how to use this library and how to create custom reinforcement learning environments can be found in the instructions.md or instructions.pdf.
+1. To run the *gym GUI*:
+```
+python rl/algorithms/Interface.py
+```
+
+2. Instructions for running the stable-baselines part of this package and how to create custom reinforcement learning environments can be found in the instructions.md or instructions.pdf.
 
 ## Acknowledgments
-
-Libraries used:
 
 - [stable-baselines](https://github.com/hill-a/stable-baselines)
 

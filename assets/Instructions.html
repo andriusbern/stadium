@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Instructions.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family:  "Meiryo", "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+</head>
+<body>
+<p>LIACS Robotics 2019</p>
+<h1 id="reinforcement-learning-workshop">Reinforcement Learning Workshop</h1>
+<p><img src="src/assets/robotics.gif" alt="drawing" height="300"/> <img src="src/assets/sc2.gif" alt="drawing" height="300"/></p>
+<p>Today you are going to learn the basics of deep reinforcement learning and train multiple agents to solve environments of varying complexity in using different platforms [<em>OpenAI gym</em>, <em>pybullet</em>, <em>V-rep</em>].</p>
+<ul>
+<li>Before you move on, you should setup the virtual environment and install the required packages which could take a while.</li>
+</ul>
+<p>Open the terminal in this directory:</p>
+<pre class="hljs"><code><div>python3 -m venv env     
+####OR####
+virtualen/ --python=/usr/bin/python3.5 env
+
+source env/bin/activate
+./install.sh
+
+# After installing
+python3 src/RLWorkshop.py
+</div></code></pre>
+<h1 id="reinforcement-learning-theory-basics">Reinforcement learning theory basics</h1>
+<p>Reinforcement learning is a framework for learning sequences of optimal actions. The main goal is to maximize the cumulative reward that the agent receives over multiple timesteps.​</p>
+<p><img src="src/assets/base.png" alt="drawing" height="300"/> <img src="src/assets/mdp.png" alt="drawing" height="300"/></p>
+<p>Reinforcement learning can be understood using the concepts of agents, environments, states, actions and rewards, all of which will be explained below. Capital letters tend to denote sets of things, and lower-case letters denote a specific instance of that thing; e.g. A is all possible actions, while a is a specific action contained in the set.</p>
+<ol>
+<li>Agent: An agent takes actions in an environment. The RL algorithm itself can also be called the agent.</li>
+<li>Action (A): A is the set of all possible moves the agent can make. The set of actions can be either discrete or continuous, e.g. discrete - [turn left, turn right]; continuous - [turn left by 2.0232 degrees, turn right by -0.023 degrees]. Most robotics and real world reinforcement learning formulations are continuous.</li>
+<li>Discount factor γ: The discount factor is multiplied by future rewards that acts as a parameter for controlling how the agent prioritizes short-term versus long-term rewards.</li>
+<li>Environment: The world through which the agent moves. The environment takes the agent’s current state and action as input, and returns as output the agent’s reward and its next state. If you are the agent, the environment could be the laws of physics (real world) or the rules of the simulation. The agent is also considered as part of the environment.</li>
+<li>State (S):  A state is a concrete current configuration of the environment that the agent is in. Usually it is represented by a vector of a specific length that includes the relevant descriptors that the agent can use to make decisions.</li>
+<li>Reward (R): A reward is the feedback by which we measure the success or failure of an agent’s actions. Rewards can be immediate or delayed. They effectively evaluate the agent’s action and are represented by a single scalar value.</li>
+<li>Policy (π): The policy is the strategy that the agent employs to determine the next action based on the current state. It maps states to actions, and its goal is to find the optimal set of actions that maximizes the discounted reward.</li>
+<li>Value (V): The expected long-term return with discount, as opposed to the short-term reward R. Vπ(s) is defined as the expected long-term return of the current state under policy π. We discount rewards, or lower their estimated value, the further into the future they occur.</li>
+<li>Episode - a set of <em>[state1-action1-state2-action2...state_n,action_n]</em> transitions until the agent exceeds the time limit / achieves the goal or fails in some critical way.</li>
+</ol>
+<p>So environments are functions that transform an action taken in the current state into the next state and a reward; agents are functions that transform the new state and reward into the next action. We can know the agent’s function, but we cannot know the function of the environment. It is a black box where we only see the inputs and outputs. Reinforcement learning represents an agent’s attempt to approximate the environment’s function, such that we can send actions into the black-box environment that maximize the rewards it gives out.</p>
+<h1 id="deep-reinforcement-learning">Deep reinforcement learning</h1>
+<img style="float: right;" src="src/assets/ac.png" alt="drawing" height="350, " hspace="20"/>
+Most robotics control tasks have continuous state and action spaces, therefore the Markov Decision Processes that define them are essentially infinite. Since there is no way to sample this infinite* space of state-action transitions, we need some form of approximation function to get reasonable performance and currently most modern methods use deep neural networks to achieve this.
+<p>The reinforcement learning algorithm that you are going to be using today is  Proximal Policy Optimization (PPO) which is one of the best performing RL algorithms to date. It is widely used in various robotics control tasks and recently it had many successes when applied to complicated environments:</p>
+<ol>
+<li><a href="https://openai.com/blog/openai-five/">OpenAI Five - Dota 2</a></li>
+<li><a href="https://openai.com/blog/openai-baselines-ppo/">Various simulated robot control tasks</a></li>
+</ol>
+<p>This algorithm uses two neural networks:</p>
+<ol>
+<li>Actor (policy network) - takes the environment state as input and produces appropriate actions as outputs. (Look at the policy (π) definition 7. above)</li>
+<li>Critic (value network) - takes states and actions as inputs and outputs a single scalar value - the estimated cumulative discounted reward that the agent is going to aqcuire onwards as it makes further actions with the current policy. This output is then used as a part of the loss function for both networks. (Look at the value (V) definition 8. above).</li>
+</ol>
+<!-- <img src="src/assets/base.png" alt="drawing" height="300"/> -->
+<p>When trained together these networks can solve a wide variety of tasks and are perfectly suited for continuous action and state spaces. The policies produced by this algorithm are stochastic, as instead of learning a specific action, given a state, the agent learns the parameters of a distribution of actions from which the actions are sampled. Therefore the actions that your agent produces are most likely going to be different each time you retrain the agent, even when using a constant random seed for network weight initialization.</p>
+<h1 id="interface">Interface</h1>
+<img style="float: right;" src="src/assets/interface.png" alt="drawing" height="400" hspace="20"/>
+<p>For your convenience you are provided with an interface that makes it easy to control the internal tensorflow training code and set up the neural networks and the reinforcement learning parameters to solve the problems. To run it:</p>
+<pre class="hljs"><code><div>python3 src/RLWorkshop.py
+</div></code></pre>
+<p>Interface guidelines:</p>
+<ol>
+<li>Create environment - initializes the agent in an environment specified by the dropdown menu with the neural network architecture configured in the 'Network' table.</li>
+<li>Train - the agent runs the environment on an episode basis (until it exceeds the time limit / achieves the goal or fails in some critical way). While training you are shown only the last frame of the episode and the neural networks are updated every <em>n</em> episodes as indicated by the parameter <em>batch_size</em>. You can see plots for average reward per batch and the loss of the policy network on the left.</li>
+<li>Test - runs the current policy of an agent in the environment step-by-step. The bottom left plot shows the output of the Actor (policy network). You can pause the training at any time and use this mode to check what your agent is doing exactly during the episode inbetween the updates.</li>
+<li>Reset - destroys the agent and lets you rerun it with a different architecture or create a different environment.</li>
+<li>Record - when the 'Test' mode is on you can record the policies of your agents and output .gif files to the current directory. Only works with <em>OpenAI gym</em> environments.</li>
+</ol>
+<p>Apart from the neural net architectures the other parameters of the environments can be changed during runtime, therefore you can experiment to achieve better performance (or worse). Each parameter has a tooltip that explains its use and the general guidelines of how they should be configured depending on the complexity of the problem.</p>
+<h1 id="tasks">Tasks</h1>
+<h2 id="1-solving-the-mountaincarcontinuous-v0-environment">1. Solving the MountainCarContinuous-v0 environment.</h2>
+<img src="src/assets/mountain.png" alt="drawing" height="300"/>
+<p>This <em>OpenAI gym</em> environment is a great illustration of a simple reinforcement learning problem where the agent has to take detrimental actions that give negative rewards in the short term in order to get a big reward for completing the task (a primitive form of planning). It has a very simple state and action space: 1 action [-1:1] indicating the velocity to left or right, and a state constisting of a vector: [position, velocity]. As the agent moves towards the goal (flagpole) it receives positive reward, as it moves away from it - negative. The agent does not have enough torque to just go uphill straight away.</p>
+<p><strong>Your task is to find the optimal learning parameters and neural network architectures that will solve the environment (consistently reaching the flagpole). Given the right parameters the environment can be solved in 1-2 network updates.</strong></p>
+<p>Hints:</p>
+<ol>
+<li>The problem is very simple, therefore the neural networks required should be small (couple of hiden layers with ~10 units each).</li>
+<li>Read the tooltips of parameters to guide you.</li>
+<li>If the output of the agent is in the range [-1:1] what is the required activation function for the actor network? (Look up the functions online if you are not sure.)</li>
+</ol>
+<h2 id="2-solving-the-bipedalwalker-v2-environment">2. Solving the BipedalWalker-v2 environment.</h2>
+<img src="src/assets/bipedal.png" alt="drawing" height="300"/>
+<p>This <em>OpenAI gym</em> environment shows a slightly more complicated agent with 4 degrees of freedom (4 actions) and a state that represents the velocities of the torso and motors as well as a simple lidar to see the terrain ahead of the agent. The state is described by a vector of length 24:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Motor angles:</td>
+<td>(4)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Motor torques:</td>
+<td>(4)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Lidar points:</td>
+<td>(12)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Torso velocity:</td>
+<td>(2)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Torso angle</td>
+<td>(1)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Torso angular velocity</td>
+<td>(1)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tasks</strong>:</p>
+<ol>
+<li>Find the optimal parameters to achieve 100 reward on average. (With the right parameters the should train in around 20 minutes or less.)</li>
+<li>Record the policy: start the 'Test' mode and press 'Record'. Press the same button again and the gif of the recording will be saved in the current directory. Submit this .gif file to erwin@liacs.nl. If you want you can train the agent in a more complicated environment (BipedalWalker-v2).</li>
+</ol>
+<p>Hints:</p>
+<ol>
+<li>When the action and state spaces grow, you need to increase the sizes of hidden layers.</li>
+<li>Generally, 2/3 hidden layers are enough to solve control problems.</li>
+<li>Learning rates should decrease as complexity increases.</li>
+</ol>
+<h1 id="optional">Optional</h1>
+<p>If you are willing you can explore some more complicated environments:</p>
+<ol>
+<li>BipedalWalkerHardcore-v2 - same agent as before, but now the environment contains randomly generated obstacles, therefore the agent really needs to utilize the lidar data to produce consistently viable policies.</li>
+<li>The pybullet environments (Ant, Hopper, Half-Cheetah and Humanoid). These environments require considerably more time to train but they are using the very responsive pybullet 3D physics engine.</li>
+<li>The custom environments in V-Rep (Nao, Quadruped robot and LidarBot). These environments train very slowly because of the overhead introduced by the V-Rep to python communication pipeline and generally require parallelization to obtain reasonable policies.</li>
+</ol>
+<h2 id="questions">Questions</h2>
+<p>If you have any problems running the environments, spot bugs in the code or if you have questions regarding reinforcement learning in general, don't hesitate to contact us:</p>
+<ol>
+<li>erwin@liacs.nl</li>
+<li>andrius.bernatavicius@gmail.com</li>
+</ol>
+
+</body>
+</html>
