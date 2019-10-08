@@ -23,9 +23,9 @@ Apart from the neural net architectures the other parameters of the environments
 
 <img src="assets/mountain.png" alt="drawing" height="300"/>
 
-This *OpenAI gym* environment is a great illustration of a simple reinforcement learning problem where the agent has to take detrimental actions that give negative rewards in the short term in order to get a big reward for completing the task (a primitive form of planning). It has a very simple state and action space: 1 action [-1:1] indicating the velocity to left or right, and a state constisting of a vector: [position, velocity]. As the agent moves towards the goal (flagpole) it receives positive reward, as it moves away from it - negative. The agent does not have enough torque to just go uphill straight away.
+This *OpenAI gym* environment is a great illustration of a simple reinforcement learning problem where the agent has to take detrimental actions that give negative rewards in the short term in order to get a big reward for completing the task (a primitive form of planning). It has a very simple state and action space: 1 action [-1:1] indicating the velocity to left or right, and a state constisting of a vector: [position, velocity]. As the agent moves towards the goal (flagpole) it receives positive reward, as it moves away from it - negative. The car does not have enough torque to just go uphill straight away, therefore it needs to perform a swinging action first.
 
-**Your task is to find the optimal learning parameters and neural network architectures that will solve the environment (consistently reaching the flagpole). Given the right parameters the environment can be solved in 1-2 network updates.**
+**Given the right parameters the environment can be solved in 1-2 network updates.**
 
 Hints: 
 1. The problem is very simple, therefore the neural networks required should be small (couple of hiden layers with ~10 units each are sufficient).

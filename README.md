@@ -9,6 +9,8 @@ This package contains:
 - Detailed instructions and examples on how to create your own custom reinforcement learning environments.
 - Scripts for training, testing, retraining models and scheduling experiments.
 
+**Note**: The GUI does not use *stable-baselines*, it uses a custom PPO implementation that is found in *rl/algorithms/*, therefore the usage is different. 
+
 ## Dependencies:
 
 - numpy==1.16.2
@@ -87,8 +89,6 @@ Here are some of the main components of MDPs in and how they relate to your code
 - **Actions** - a set of distinct ways that the agent can interact with the environment (determines the size of the NN output). Can either do regression (continuous actions - [e.g. turn 27.2 degrees]) or be used with softmax to select a single discrete action [e.g. turn left].
 - **Rewards** - a scalar value that the environment provides to the agent to differentiate between good/bad actions. Usually its a composite of multiple reward criteria that all get summed up into a single scalar.
 - **Episode** - a set of [state0-action0-state1-action1-...state_n,action_n] transitions performed by the agent until a termination condition. Termination could be any event (e.g. exceeding the time limit, achieving the goal or failing at the task in some way). After the end of episode the environment is reset to its initial conditions.
-
-
 
 
 ---

@@ -3,9 +3,8 @@ import time, os
 
 packages = ['numpy==1.16.2',        
             'tensorflow==1.13.1',
-            'gym',
-            'opencv-python',# Image processing
-            'matplotlib',   # Visualization        
+            'gym[all]',
+            'opencv-python',
             'stable_baselines',
             'pyyaml',
             'PyQt5',

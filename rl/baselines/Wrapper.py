@@ -17,7 +17,6 @@ tf.logging.info('TensorFlow')
 tf.logging.set_verbosity(tf.logging.ERROR)
 tf.logging.info('TensorFlow')
 
-
 def get_env_type(env_name):
     """
     Get the type of environment from the env_name string
