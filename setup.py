@@ -2,7 +2,7 @@ from setuptools import setup
 import time, os
 
 packages = ['numpy==1.16.2',        
-            'tensorflow==1.13.1',
+            'tensorflow==1.15.0',
             'gym[all]',
             'opencv-python',
             'stable_baselines',
