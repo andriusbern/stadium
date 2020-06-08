@@ -1,0 +1,150 @@
+main:
+  model: PPO2
+  policy: CustomCnnPolicy
+  n_workers: 16
+  n_steps: 50000000
+  save_every: 1000
+  logs: 
+    - hd
+    - u
+    - intermediate_hd
+    - solved
+    - hd_difference
+    - AU
+    - CG
+    - GC
+    - UA
+    # - GU
+    # - UG
+    # - CG_
+    # - AU_
+
+# models:
+PPO2:
+  gamma: 1
+  n_steps: 256
+  ent_coef: 0.012
+  learning_rate: 0.00025
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  lam: 0.95
+  nminibatches: 16
+  noptepochs: 4
+  cliprange: 0.2
+  full_tensorboard_log: false
+  verbose: 2
+
+environment:
+  # Encoding
+  verbose: false
+  kernel_size: 25
+  vienna_params: 2
+  permute: false
+  encoding_type: 0
+  gc_penalty: true
+  permutation_threshold: 10
+  permutation_radius: 1
+  permutation_budget: 10
+  mutation_probability: 0.5
+  allow_gu_permutations: true
+
+  # Reward
+  detailed_comparison: true
+  reward_exp: 8
+  write_threshold: 0
+  # Data
+  meta_learning: true
+  seq_count: 200
+  randomize: true
+  exact_seq_length: true
+  test_set: false
+  seq_len:
+    - 50
+    - 80
+
+testing:
+  evaluate_every: 2500000
+  test_timeout: 60
+
+# policies:
+#   CnnPolicy: {}
+#   CnnLnLstmPolicy: {}
+CustomCnnPolicy:
+    filters:
+      - 256
+      - 128
+      - 64
+      - 16
+    kernel_size:
+      - - 5
+        - 1
+      - - 1
+        - 7
+      - - 1
+        - 5
+      - - 1
+        - 5
+    stride:
+      - 1
+      - 1
+      - 1
+      - 1
+    lstm: []
+    shared:
+      - 512
+      - 256
+    h_actor: []
+      # - 64
+    h_critic: []
+      # - 16
+    activ: relu
+    pd_init_scale: 0.05
+    conv_init_scale: 1.4
+    kernel_initializer: glorot_normal_initializer
+    init_bias: 0.5
+CustomCnnLnLstmPolicy:
+  filters:
+    - 64
+    - 128
+    - 32
+    - 8
+
+  kernel_size:
+    - - 5
+      - 1
+    - - 1
+      - 10
+    - - 1
+      - 10
+    - - 1
+      - 10
+  stride:
+    - 1
+    - 1
+    - 1
+    - 1
+  lstm:
+  shared:
+    - lstm
+    - 128
+    - 128
+  h_actor: []
+    # - 64
+  h_critic: []
+    # - 16
+  activ: relu
+  pd_init_scale: 0.05
+  conv_init_scale: 1.4
+  kernel_initializer: glorot_normal_initializer
+  init_bias: 0.5
+CustomCnnLstmPolicy: {}
+CustomMlpPolicy:
+  shared:
+    - 512
+    - 512
+  h_actor:
+    - 64
+    - 32
+  h_critic:
+    - 64
+    - 32

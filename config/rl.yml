@@ -1,0 +1,78 @@
+environment: []
+
+main:
+    model: PPO2
+    policy: CustomMlpPolicy
+    normalize: false
+    n_workers: 1         # Parallel environment count
+    n_steps: 500000      # Steps to train
+    save_every: 2000     # Save a checkpoint of the model every n steps
+    logs: []
+
+PPO2:
+    gamma: 0.98          # Discount factor for future rewards
+    n_steps: 128         # Batch size (n_steps * n_workers)
+    ent_coef: 0.01       # Entropy loss coefficient 
+    learning_rate: 0.005 # LR
+    vf_coef: 0.5         # The contribution of value function loss to the total loss
+    max_grad_norm: 0.5   # Max range of the gradient clipping
+    lam: 0.95            # Generalized advantage estimation (variance/bias tradeoff)
+    nminibatches: 4      # Number of minibatches for SGD/Adam updates
+    noptepochs: 4        # Number of iterations for SGD/Adam
+    cliprange: 0.2       # Clip factor for PPO 
+    full_tensorboard_log: false
+    verbose: 2
+
+CustomMlpPolicy:
+    shared:
+        - 256
+        - 256
+    h_actor: [] 
+    h_critic: [] 
+
+
+CustomCnnPolicy:
+    filters:
+        - 12
+        - 4
+    kernel_size:
+        - 3
+        - 3
+    stride:
+        - 1
+        - 1
+    shared: 
+        - 32
+        - 32
+    h_actor: 
+        - 16
+        - 16
+    h_critic: 
+        - 16
+        - 8
+    activ: relu
+    pd_init_scale: 0.05
+    conv_init_scale: 1.4
+    kernel_initializer: glorot_normal_initializer
+    init_bias: .5
+
+
+# MODELS:
+# -----
+# For discrete action space environments:
+#     PPO2, DQN, ACER, A2C, ACKTR
+# For continuous action space environments:
+#     PPO2, A2C
+# POLICIES:
+# ---------
+#     Configurable:
+#         CustomCnnPolicy - CNN feature extraction
+#         CustomLSTMPolicy - LSTM cells followed by a multilayer perceptron
+#         CustomMlpPolicy - Multilayer perceptron
+#         CustomDQNPolicy - Multilayer perceptron specifically for DQN
+#     Defaults:
+#         CnnPolicy - CNN as described in 2014 Atari paper
+#         MlpPolicy - simple MLP with two hidden layers of size 64
+
+# Arguments that get passed to the constructor of your class instance
+# as config={} keyword

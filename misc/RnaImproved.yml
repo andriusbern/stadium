@@ -1,0 +1,129 @@
+main:
+  model: PPO2
+  policy: CustomCnnPolicy
+  n_workers: 16
+  n_steps: 40000000
+  save_every: 1000
+  logs: 
+    - hd
+    - u
+
+# models:
+PPO2:
+  gamma: 1
+  n_steps: 128
+  ent_coef: 0.01
+  learning_rate: 0.0003
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  lam: 0.98
+  nminibatches: 8
+  noptepochs: 3
+  cliprange: 0.15
+  full_tensorboard_log: false
+  verbose: 2
+
+environment:
+  # Encoding
+  verbose: false
+  kernel_size: 30
+  vienna_params: 2
+  permute: false
+  encoding_type: 2
+  gc_penalty: true
+
+  # Reward
+  detailed_comparison: true
+  reward_exp: 8
+  write_threshold: 0
+
+  # Data
+  meta_learning: true
+  seq_count: 200
+  randomize: true
+  exact_seq_length: true
+  test_set: false
+  seq_len:
+    - 60
+    - 100
+
+testing:
+  evaluate_every: 2500000
+  test_timeout: 60
+
+# policies:
+#   CnnPolicy: {}
+#   CnnLnLstmPolicy: {}
+CustomCnnPolicy:
+    filters:
+      - 128
+      - 256
+      - 64
+      - 16
+    kernel_size:
+      - - 10
+        - 1
+      - - 1
+        - 15
+      - - 1
+        - 5
+      - - 1
+        - 5
+    stride:
+      - 1
+      - 1
+      - 1
+      - 1
+    lstm: []
+    shared:
+      - 512
+      - 256
+    h_actor: []
+      # - 64
+    h_critic: []
+      # - 16
+    activ: relu
+    pd_init_scale: 0.05
+    conv_init_scale: 1.4
+    kernel_initializer: glorot_normal_initializer
+    init_bias: 0.5
+CustomCnnLnLstmPolicy:
+  filters:
+    - 32
+    - 128
+    - 16
+  kernel_size:
+    - - 10
+      - 1
+    - - 1
+      - 10
+    - - 1
+      - 5
+  stride:
+    - 1
+    - 1
+    - 1
+  lstm:
+  shared:
+    - lstm
+    - 128
+  h_actor:
+    - 64
+  h_critic:
+    - 16
+  activ: relu
+  pd_init_scale: 0.05
+  conv_init_scale: 1.4
+  kernel_initializer: glorot_normal_initializer
+  init_bias: 0.5
+CustomCnnLstmPolicy: {}
+CustomMlpPolicy:
+  shared:
+    - 512
+    - 512
+  h_actor:
+    - 64
+    - 32
+  h_critic:
+    - 64
+    - 32

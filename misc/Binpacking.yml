@@ -1,0 +1,176 @@
+main:
+    model: PPO2
+    policy: CustomCnnPolicy
+    n_workers: 1
+    n_steps: 10000000
+    save_every: 500
+    normalize: true
+    logs:
+        - prev_placements
+        - steps
+        - layer_fill
+
+PPO2:
+    gamma: 0.999
+    n_steps: 256
+    ent_coef: 0.005
+    learning_rate: 0.0005
+    vf_coef: 0.5 
+    max_grad_norm: 0.5
+    lam: 0.95
+    nminibatches: 16
+    noptepochs: 3
+    cliprange: 0.10
+    full_tensorboard_log: false
+    verbose: 0
+    
+CustomCnnPolicy:
+    filters:
+    - 32
+    - 32
+    - 32
+    - 64
+    - 32
+    - 16
+    kernel_size:
+    - 3
+    - 3
+    - 5
+    - 5
+    - 5
+    - 3
+    stride:
+    - 1
+    - 1
+    - 2
+    - 2
+    - 2
+    - 1
+    lstm: []
+    shared: 
+    - 256
+    - 256
+    h_actor:
+    - 32
+    h_critic:
+    - 16
+    activ: relu
+    pd_init_scale: 0.05
+    conv_init_scale: 1.4
+    kernel_initializer: glorot_normal_initializer
+    init_bias: .5
+    
+drawer:
+    use_queue: true
+    queue_bg_color: 10
+    queue_image_size:
+    - 12
+    - 12
+    queue_item_count: 5
+    queue_type: grid
+    queue_grid_size:
+    - 2
+    - 4
+    queue_orientation: 1
+    queue_choice_indicator: false
+    queue_scaling: 4
+    queue_offset: 4
+    random_queue: false
+    use_original_queue: true
+    
+    # Height, layering
+    base_intensity: 50
+    height_scaling: 0.25
+    layer_drawing: true
+    layer_count: 2
+    layer_threshold: 10
+    
+    # Weight
+    weight_channel: 2
+    draw_weight: true
+    draw_max_w_on_top: false
+    weight_scaling: 200
+    
+    # Items, load space, supports
+    loadspace_bg_color:
+        - 20
+        - 100
+        - 20
+    load_space_boundary: 0
+    draw_supports: false
+    draw_support_borders: true
+    highlight_group: false
+
+    # Borders
+    draw_borders: true
+    border_color:
+        - 0
+        - 0
+        - 0
+    border_width: 1
+
+    placement_correction: 2
+    random_pending_placement_position: true
+    pending_placement_channel: 1
+    support_highlight_intensity: 180
+    pending_placement_intensity: 50
+    bottom_support_intensity: 55
+
+    same_height_highlight_radius: 10
+    same_height_highlight_intensity: 150
+    same_height_highlight_channel: 2
+
+environment:
+    # Actions
+    move_to_edge: false
+    choose_item: true
+    small_step_size: 1
+    large_step_size: 10
+    weight_support: false
+
+    # Env
+    first_layer: true
+    build_full_layer_first: true
+    new_layer_threshold: 0
+    subproblem_attempts: 0
+    number_of_load_spaces: 3
+    scale: 10
+    
+    step_limit: 1250
+    random_start: false
+    load_space_scaling: 1
+    max_height: 2000
+    verbose: true
+    verbose_rewards: false
+
+    step_reward                  : -0.03
+    edge_alignment_reward        : 0.3
+    placement_reward             : 0.7
+    wall_alignment_reward        : 0.8
+    same_height_reward           : 0.4
+    grouping_reward              : 0.2
+    end_of_episode               : 0.2
+    change_item_reward           : 0
+    interlocking_reward          : 0
+    area_fill_reward             : 0
+    individual_stability         : 0 
+
+    # Victor
+    stability                    : -0.3
+    send_to_victor               : false
+    base_victor_reward_scaling   : 0.0001
+    KeepGroupsTogetherCriterion  : 0.3
+    StackedQuantityCriterion     : 1
+    UtilizationCriterion         : 0.3
+    HeavyBottomCriterion         : 0.3
+    InterlockingCriterion        : 0.3
+    EdgePlacementCriterion       : 0.01
+    GapSpaceCriterion            : 0.3
+    NestingCriterion             : 0.3
+    DensityCriterion             : 0.3
+    StackedVolumeCriterion       : 1
+    CoherentGroupCriterion       : 0.3
+    OrderLinesCriterion          : 1
+    PetQuantityCriterion         : 0.3
+    SmallItemsOnFloorCriterion   : 0.1
+    BulgedCriterion              : 0.1

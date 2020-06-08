@@ -1,0 +1,58 @@
+
+CustomMlpPolicy:
+    shared:
+        - 16
+        - 16
+    h_actor: # Policy head
+        - 16
+        # - 8
+    h_critic: # Value head
+        - 8
+        # - 4
+
+CustomCnnPolicy:
+    filters:
+        - 12
+        - 4
+        # - 4
+    kernel_size:
+        - 3
+        - 3
+        # - 3
+    stride:
+        - 1
+        - 1
+        # - 1
+    shared: # Number of nodes in the layers of the shared part of the fully connected network
+        - 32
+        - 32
+    h_actor: # Number of nodes per layer in the actor part of the network
+        - 16
+        - 16
+    h_critic: # Number of nodes per layer in the critic part of the network
+        - 16
+        - 8
+    activ: relu
+    pd_init_scale: 0.05
+    conv_init_scale: 1.4
+    kernel_initializer: glorot_normal_initializer
+    init_bias: .5
+
+
+CustomDQNPolicy:
+    layers:
+        - 64
+        - 64
+
+CustomLSTMPolicy:
+    n_lstm: 64
+    shared:
+        - 64
+        - 64
+        - lstm
+    h_actor:
+        []
+        # - 16
+    h_critic:
+        []
+        # - 16
