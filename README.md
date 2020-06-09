@@ -1,6 +1,6 @@
 # *RL* Package
 
-### (09/06) Major overhaul that includes configuration for [stable-baselines](https://github.com/hill-a/stable-baselines) will be posted in the upcoming month.
+### (09/06) Overhaul that includes [stable-baselines](https://github.com/hill-a/stable-baselines) GUI integration will be posted in the upcoming month.
 
 <img src="assets/gui.gif" width="500"> 
 
