@@ -1,11 +1,13 @@
 # *RL* Package
 
+### (09/06) Major overhaul that includes configuration for [stable-baselines](https://github.com/hill-a/stable-baselines) will be posted in the upcoming month.
+
 <img src="assets/gui.gif" width="500"> 
 
 This package contains:  
 
 - A GUI for *OpenAI gym* environments where agents can be configured, trained and tested using the same simple interface with a basic implementation of [PPO](https://openai.com/blog/openai-baselines-ppo/).
-- Contains a wrapper class for [stable-baselines](https://github.com/hill-a/stable-baselines) Reinforcement Learning library that adds functionality for logging, loading and configuring RL models, network architectures and environments in a simple way.
+- Contains a wrapper class for  Reinforcement Learning library that adds functionality for logging, loading and configuring RL models, network architectures and environments in a simple way.
 - Detailed instructions and examples on how to create your own custom reinforcement learning environments.
 - Scripts for training, testing, retraining models and scheduling experiments.
 
