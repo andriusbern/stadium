@@ -1,0 +1,1 @@
+from .settings import GlobalConfig as config

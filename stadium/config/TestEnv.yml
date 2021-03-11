@@ -1,0 +1,91 @@
+
+environment:
+    grid_size: 20         # Size of the grid to use NxN
+    step_limit: 200       # Max number of steps to reach the goal
+    goal_reward: 10
+    image_as_state: true # Use image as the state input? 
+    reward_shaping: false # Use euclidean distance from goal to the target for the extra reward
+    show_training: false  # Render the agent while training
+
+main:
+    model: PPO2
+    policy: CustomCnnPolicy
+    n_workers: 16    # Parallel environment count
+    steps_to_train: 100000 # Steps to train
+    logs:
+        - steps
+
+PPO2:
+    gamma: 0.99           # Discount factor for future rewards
+    n_steps: 256          # Batch size (n_steps * n_workers)
+    ent_coef: 0.01        # Entropy loss coefficient (higher values encourage more exploration)
+    learning_rate: 0.005  # LR
+    vf_coef: 0.5          # The contribution of value function loss to the total loss of the network
+    max_grad_norm: 0.5    # Max range of the gradient clipping
+    lam: 0.95             # Generalized advantage estimation, for controlling variance/bias tradeoff
+    nminibatches: 4       # Number of minibatches for SGD/Adam updates
+    noptepochs: 4         # Number of iterations for SGD/Adam
+    cliprange: 0.2        # Clip factor for PPO
+#
+    verbose: 2
+
+CustomMlpPolicy:
+    shared:
+        - 32
+        - 32
+    h_actor: [] # Policy head
+        # - 16
+        # - 8
+    h_critic: [] # Value head
+        # - 8
+        # - 4
+
+CustomCnnPolicy:
+    filters:
+        - 16
+        - 16
+        - 8
+        # - 4
+    kernel_size:
+        - 3
+        - 3
+        - 3
+    stride:
+        - 1
+        - 2
+        - 1
+    shared: # Number of nodes in the layers of the shared part of the fully connected network
+        - 32
+        - 32
+    h_actor: # Number of nodes per layer in the actor part of the network
+        - 16
+        - 16
+    h_critic: # Number of nodes per layer in the critic part of the network
+        - 16
+        - 8
+    activ: relu
+    pd_init_scale: 0.05
+    conv_init_scale: 1.4
+    kernel_initializer: glorot_normal_initializer
+    init_bias: .5
+
+
+# MODELS:
+# -----
+# For discrete action space environments:
+#     PPO2, DQN, ACER, A2C, ACKTR
+# For continuous action space environments:
+#     PPO2, A2C
+# POLICIES:
+# ---------
+#     Configurable:
+#         CustomCnnPolicy - CNN feature extraction
+#         CustomLSTMPolicy - LSTM cells followed by a multilayer perceptron
+#         CustomMlpPolicy - Multilayer perceptron
+#         CustomDQNPolicy - Multilayer perceptron specifically for DQN
+#     Defaults:
+#         CnnPolicy - CNN as descr<Kibed in 2014 Atari paper
+#         MlpPolicy - simple MLP with two hidden layers of size 64
+
+# Arguments that get passed to the constructor of your class instance
+# as config={} keyword

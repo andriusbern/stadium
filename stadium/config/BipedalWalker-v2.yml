@@ -1,0 +1,53 @@
+environment: {}
+
+main:
+    # MODELS:
+    # -----
+    # For discrete action space environments:
+    #     PPO2, DQN, ACER, A2C
+    # For continuous action space environments:
+    #     PPO2, A2C
+
+    # POLICIES:
+    # ---------
+    #     Configurable:
+    #         CustomCnnPolicy - CNN feature extraction
+    #         CustomLSTMPolicy - LSTM cells followed by a multilayer perceptron
+    #         CustomMlpPolicy - Multilayer perceptron
+    #         CustomDQNPolicy - Multilayer perceptron specifically for DQN
+    #     Defaults:
+    #         CnnPolicy - CNN as described in 2014 Atari paper
+    #         MlpPolicy - simple MLP with two hidden layers of size 64
+    
+    model: PPO2
+    policy: CustomMlpPolicy
+    n_workers: 1       # Parallel environments
+    steps_to_train: 100000    # Steps to train
+    # save_every: 50000  # Save a checkpoint of the model every n steps
+
+    # Tensorboard logs for environment attributes e.g. self.steps
+    logs: 
+        - steps
+models:
+    PPO2:
+        gamma: 0.99          # Discount factor for future rewards
+        n_steps: 256         # Batch size (n_steps * n_workers)
+        ent_coef: 0.01       # Entropy loss coefficient (higher values encourage more exploration)
+        learning_rate: 0.00025 # LR
+        vf_coef: 0.5         # The contribution of value function loss to the total loss of the network
+        max_grad_norm: 0.5   # Max range of the gradient clipping 
+        lam: 0.95            # Generalized advantage estimation, for controlling variance/bias tradeoff
+        nminibatches: 4      # Number of minibatches for SGD/Adam updates
+        noptepochs: 4        # Number of iterations for SGD/Adam
+        cliprange: 0.2       # Clip factor for PPO (the action probability distribution of the updated policy cannot differ from the old one by this fraction [measured by KL divergence])
+
+        verbose: 2  
+
+CustomMlpPolicy: 
+    layers:
+        - 128
+        - 64
+    # h_actor: []
+        # - 16
+    # h_critic: []
+ 

@@ -1,0 +1,13 @@
+dist/
+build/
+assets/
+.vscode
+__pycache__/
+*.pyc
+
+stadium.egg-info
+app.spec
+stadium.zip
+stadiums.zip
+test.py
+instructions.md

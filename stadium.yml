@@ -1,0 +1,22 @@
+name: stadium
+channels:
+- conda-forge
+# - conda-metachannel
+dependencies:
+  - python=3.6
+  - pip
+  - openblas
+  - pyside2
+  - mpi4py
+  - tensorboard=1.12.0
+  - swig
+  # - pip:
+    # - tensorflow==1.12.0
+    # - stable-baslines==2.7.0
+    # - pyqtgraph==0.11.1
+    # - opencv-python
+    # - numpy==1.16.4
+    # - procgen
+    # - pyyaml
+    # - dataclasses
+    # - gym_sokoban

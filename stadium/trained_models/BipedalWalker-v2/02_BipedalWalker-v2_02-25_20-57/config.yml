@@ -1,0 +1,13 @@
+CustomMlpPolicy:
+  layers: [64, 64]
+PPO2: {cliprange: 0.2, ent_coef: 0.01, gamma: 0.99, lam: 0.95, learning_rate: 0.005,
+  max_grad_norm: 0.5, n_steps: 256, nminibatches: 4, noptepochs: 4, verbose: 2, vf_coef: 0.5}
+environment: {}
+main:
+  highest_reward: 16.511568414345675
+  logs: [steps]
+  model: PPO2
+  n_workers: 1
+  policy: CustomMlpPolicy
+  steps_to_train: 500000
+  steps_trained: 570368
