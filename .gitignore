@@ -1,6 +1,6 @@
 dist/
 build/
-assets/
+# assets
 .vscode
 __pycache__/
 *.pyc
