@@ -4,7 +4,7 @@ build/
 .vscode
 __pycache__/
 *.pyc
-stadium/trained_models
+# stadium/trained_models
 
 stadium.egg-info
 app.spec
