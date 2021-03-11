@@ -21,7 +21,7 @@
 
 ---
 
-## Dependencies:
+<!-- ## Dependencies:
 ```
 - numpy==1.16.2
 - tensorflow==1.13.1
@@ -33,7 +33,7 @@
 -GUI-
 - PyQt5
 - pyqtgraph
-```
+``` -->
 
 ----
 
@@ -46,6 +46,7 @@ git clone https://github.com/andriusbern/stadium
 conda install -f stadium.yml
 conda activate stadium
 pip install -e .
+python stadium.py
 ```
 
 ---
