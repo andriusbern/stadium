@@ -4,6 +4,7 @@ assets/
 .vscode
 __pycache__/
 *.pyc
+stadium/trained_models
 
 stadium.egg-info
 app.spec
@@ -11,4 +12,3 @@ stadium.zip
 stadiums.zip
 test.py
 instructions.md
-stadium/trained_models
