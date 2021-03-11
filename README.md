@@ -43,7 +43,7 @@ To install the package and all dependencies:
 
 ```
 git clone https://github.com/andriusbern/stadium
-conda install -f stadium.yml
+conda env create -f stadium.yml
 conda activate stadium
 pip install -e .
 python stadium.py
