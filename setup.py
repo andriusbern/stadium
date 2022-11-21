@@ -6,7 +6,7 @@ packages = [
     'opencv-python',
     'gym==0.15.4',
     'stable_baselines==2.7.0',
-    'tensorflow==1.12.0',
+    'tensorflow==2.9.3',
     'procgen',
     'dataclasses',
     'gym_sokoban',
